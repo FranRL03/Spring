@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	
+	<!-- Agregamos el link para el css (es uno cutre usado por el tutorial interactivo de Th)
+Se han agregado los ficheros css dentro de la carpeta static y a su vez dentro de otra 
+llamada css. Hay que poner los dos href, estático y para th
+La ruta comienza a partir de la carpeta static, es decir, comenzamocon barra y después 
+la css/nombre del archivo con extensión css
+ -->
+
+	<link rel="stylesheet" href="/css/main-static.css" th:href="@{/css/main.css}" />
+
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap CSS 
+
+Estos link, de webjars para bootstrap no las vamos a usar, es del ejemplo de forma antigua. Vosotros debéis incluir los bootstrap como ha comentado Rafa
+en sus clases-->
+
+	<link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css"
+		integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+	<title>Primer Switch</title>
+</head>
+
+<body>
+	<h1>Ejemplo 2 Thymeleaf: Switch</h1>
+	<h2>Customer list</h2>
+	<table>
+		<thead>
+			<tr>
+				<th>Nombre</th>
+				<th>Primer Apellido</th>
+				<th>Segundo Apellido</th>
+				<th>Género</th>
+			</tr>
+		</thead>
+
+		<!-- La etiqueta th:remove es una especie de condicional antes de pintar las filas, es decir, 
+		comprueba alguna condición y si se cumple se puede pintar de otra manera, 
+		poner el valor un hipervínculo, borrar una fila. etc. Es como aplicar alguna condición 
+		durante el procesamiento de la plantilla. 
+		Por ejemplo, cuando tenemos cierta información que no queremos mostrar. 
+             
+        Para saber más sobre la línea remove: 8.3 Removing template fragments del manual usingthymelaf 
+        
+        th:removese puede comportar de cinco maneras diferentes, dependiendo de su valor:
+
+		all: elimina tanto la etiqueta contenedora como todos sus elementos secundarios.
+		body: no elimina la etiqueta contenedora, pero elimina todos sus elementos secundarios.
+		tag: elimina la etiqueta contenedora, pero no elimina sus elementos secundarios.
+		all-but-first: elimina todos los elementos secundarios de la etiqueta contenedora, excepto el primero.
+		none: Hacer nada. Este valor es útil para la evaluación dinámica.
+            
+        Esto es de nuevo un bucle que pintará las distintas filas de según los elementos que haya en la lista. 
+        Se pintan las primeras columnas y en la de género, antes se evalúa con un switch de qué tipo es 
+        para pintar un icono, otro o desconocido si es el caso
+            -->
+		<tbody th:remove="all-but-first">
+			<tr th:each="customer : ${customerList}">
+				<td th:text="${customer.nombre}"></td>
+				<td th:text="${customer.apellido1}"></td>
+				<td th:text="${customer.apellido2}"></td>
+
+				<!-- Se evalúa en el switch el atributo género y si es male o female se
+                    muestra una imagen u otra en la tabla según el case. Como se puede ver, no es necesario 
+                    poner break en los case, una vez que encuentra uno cuya respuesta es true
+                    el resto serán false y solo se hace uno de los case en cada iteración 
+                    Como el atributo género está declarado como String, en el case debemos usar 
+                    la palabra male o female entre comillas dobles-->
+
+				<td th:switch="${customer.genero}">
+
+					<!-- La etiqueta th:src busca dentro de la carpeta src/main/resources/static, 
+					luego la ruta que debemos dar para encontrar las imágenes es la relativa a esa carpeta, 
+					por eso empezamos src="/img... porque es la primera carpeta dentro de static a la que queremos acceder
+                    
+                    Hay src para parte estática (no se está renderizando la plantilla con datos) y con th delante, 
+                    cuando sí. Debemos poner siempre las dos
+                    El nombre del archivo imagen, debe darse con extensión incluida  -->
+
+					<img th:case="'male'" src="/img/male.png" th:src="@{/img/male.png}" alt="Male" /> <img
+						th:case="'female'" src="/img/female.png" th:src="@{/img/female.png}" alt="Female" /> <span
+						th:case="*">Unknown</span>
+				</td>
+
+			</tr>
+		</tbody>
+	</table>
+
+
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="/webjars/jquery/jquery.min.js"
+		integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+		integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+		crossorigin="anonymous"></script>
+	<script src="/webjars/bootstrap/js/bootstrap.min.js"
+		integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+		crossorigin="anonymous"></script>
+</body>
+
+</html>
